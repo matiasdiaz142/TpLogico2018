@@ -66,3 +66,11 @@ televidenteResponsable(Persona):-persona(Persona),not(leSpoileo(Persona,_,_)).
 persona(Persona):-mira(Persona,_).
 persona(Persona):-planeaVer(Persona,_).
 
+%Punto 6
+%vieneZafando(Persona,Serie)
+%vieneZafando(Persona,Serie):-persona(Persona),not(leSpoileo(_,Persona,Serie)).
+
+serie(Serie):-mira(_,Serie).
+
+%Nose si anda
+vieneZafando(Persona,Serie):-serie(Serie),forall(persona(Persona),not(leSpoileo(_,Persona,Serie))).
