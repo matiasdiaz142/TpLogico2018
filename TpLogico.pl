@@ -59,3 +59,10 @@ esSpoiler(Serie,Spoiler):-paso(Serie,_,_,Spoiler).
 %leSpoileo(Persona1,Persona2,Serie)
 leSpoileo(Persona1,Persona2,Serie):-mira(Persona2,Serie),paso(Serie,_,_,Spoiler),leDijo(Persona1,Persona2,Serie,Spoiler).
 
+%Punto 5
+%televidenteResponsable(Persona)
+televidenteResponsable(Persona):-persona(Persona),not(leSpoileo(Persona,_,_)).
+
+persona(Persona):-mira(Persona,_).
+persona(Persona):-planeaVer(Persona,_).
+
