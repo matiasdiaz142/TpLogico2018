@@ -46,7 +46,7 @@ paso(got, 4, 5, relacion(amistad, tyrion, dragon)).
 %leDijo/4
 leDijo(gaston, maiu, got, relacion(amistad, tyrion, dragon)).
 leDijo(nico, maiu, starWars, relacion(parentesco, vader, luke)).
-leDijo(nico, juan, got, muerte(tyrion)). 
+leDijo(nico, juan, got, muerte(tyrion)).
 leDijo(aye, juan, got, relacion(amistad, tyrion, john)).
 leDijo(aye, maiu, got, relacion(amistad, tyrion, john)).
 leDijo(aye, gaston, got, relacion(amistad, tyrion, dragon)).
@@ -56,3 +56,6 @@ leDijo(aye, gaston, got, relacion(amistad, tyrion, dragon)).
 esSpoiler(Serie,Spoiler):-paso(Serie,_,_,Spoiler).
 
 %Punto 4
+%leSpoileo(Persona1,Persona2,Serie)
+leSpoileo(Persona1,Persona2,Serie):-mira(Persona2,Serie),paso(Serie,_,_,Spoiler),leDijo(Persona1,Persona2,Serie,Spoiler).
+
