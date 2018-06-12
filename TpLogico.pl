@@ -33,6 +33,9 @@ serie(got,2,10).
 serie(himym,1,23).
 serie(drHouse,8,16).
 
+%Temporada de una serie.
+temporada(Serie,T):- serie(Serie,T,_).
+
 %Punto 2
 %paso(Serie, Temporada, Episodio, Lo que paso)
 paso(futurama, 2, 3, muerte(seymourDiera)).
@@ -67,10 +70,14 @@ persona(Persona):-mira(Persona,_).
 persona(Persona):-planeaVer(Persona,_).
 
 %Punto 6
-%vieneZafando(Persona,Serie)
-%vieneZafando(Persona,Serie):-persona(Persona),not(leSpoileo(_,Persona,Serie)).
+vieneZafando(Persona,Serie):- persona(Persona),not(leSpoileo(_,Persona,Serie)),vio(Persona,Serie),popular(Serie).
+vieneZafando(Persona,Serie):- persona(Persona),not(leSpoileo(_,Persona,Serie)),vio(Persona,Serie),
+temporada(Serie,T),forall(paso(Serie,T,_,_), esFuerte(Serie)).
 
-serie(Serie):-mira(_,Serie).
+esFuerte(Serie):- paso(Serie,_,_,muerte(_)).
+esFuerte(Serie):- paso(Serie,_,_,relacion(amorosa,_,_)).
+esFuerte(Serie):- paso(Serie,_,_,relacion(parentesco,_,_)).
 
-%Nose si anda
-vieneZafando(Persona,Serie):-serie(Serie),forall(persona(Persona),not(leSpoileo(_,Persona,Serie))).
+vio(Persona,Serie):-mira(Persona,Serie).
+vio(Persona,Serie):-planeaVer(Persona,Serie).
+ 
