@@ -60,7 +60,7 @@ esSpoiler(Serie,Spoiler):-paso(Serie,_,_,Spoiler).
 
 %Punto 4
 %leSpoileo(Persona1,Persona2,Serie)
-leSpoileo(Persona1,Persona2,Serie):-mira(Persona2,Serie),paso(Serie,_,_,Spoiler),leDijo(Persona1,Persona2,Serie,Spoiler).
+leSpoileo(Persona1,Persona2,Serie):-vio(Persona2,Serie),leDijo(Persona1,Persona2,Serie,Spoiler),esSpoiler(Serie,Spoiler).
 
 %Punto 5
 %televidenteResponsable(Persona)
@@ -70,17 +70,16 @@ persona(Persona):-mira(Persona,_).
 persona(Persona):-planeaVer(Persona,_).
 
 %Punto 6
-vieneZafando(Persona,Serie):- persona(Persona),not(leSpoileo(_,Persona,Serie)),vio(Persona,Serie),popular(Serie).
-vieneZafando(Persona,Serie):- persona(Persona),not(leSpoileo(_,Persona,Serie)),vio(Persona,Serie),
-temporada(Serie,T),forall(paso(Serie,T,_,_), esFuerte(Serie)).
+vieneZafando(Persona,Serie):- vio(Persona,Serie),not(leSpoileo(_,Persona,Serie)),popular(Serie).
+vieneZafando(Persona,Serie):- vio(Persona,Serie),not(leSpoileo(_,Persona,Serie)),forall(vio(Persona,Serie),pasoAlgoFuerte(Serie,T)).
 
-esFuerte(Serie):- paso(Serie,_,_,muerte(_)).
-esFuerte(Serie):- paso(Serie,_,_,relacion(amorosa,_,_)).
-esFuerte(Serie):- paso(Serie,_,_,relacion(parentesco,_,_)).
+pasoAlgoFuerte(Serie,Temporada):- paso(Serie,Temporada,_,muerte(_)).
+pasoAlgoFuerte(Serie,Temporada):- paso(Serie,Temporada,_,relacion(amorosa,_,_)).
+pasoAlgoFuerte(Serie,Temporada):- paso(Serie,Temporada,_,relacion(parentesco,_,_)).
 
 vio(Persona,Serie):-mira(Persona,Serie).
 vio(Persona,Serie):-planeaVer(Persona,Serie).
- 
+
  %Segunda Entrega
  
  %Punto 1
