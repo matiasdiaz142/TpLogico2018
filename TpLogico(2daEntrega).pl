@@ -60,7 +60,7 @@ esSpoiler(Serie,Spoiler):-paso(Serie,_,_,Spoiler).
 
 %Punto 4
 %leSpoileo(Persona1,Persona2,Serie)
-leSpoileo(Persona1,Persona2,Serie):-vio(Persona2,Serie),leDijo(Persona1,Persona2,Serie,Spoiler),esSpoiler(Serie,Spoiler).
+leSpoileo(Persona1,Persona2,Serie):-vio(Persona2,Serie),leDijo(Persona1,Persona2,Serie,Spoiler).
 
 %Punto 5
 %televidenteResponsable(Persona)
@@ -84,5 +84,8 @@ vio(Persona,Serie):-planeaVer(Persona,Serie).
  
  %Punto 1
  
- malaGente(Persona):- persona(Persona),forall(leDijo(Persona,OtraPersona,Serie,_),leSpoileo(Persona,OtraPersona,Serie)).
+malaGente(Persona):- persona(Persona),forall(leDijo(Persona,OtraPersona,Serie,_),leSpoileo(Persona,OtraPersona,Serie)).
+malaGente(Persona):-leSpoileo(Persona,_,Serie),not(mira(Persona,Serie)).
+
+%Punto 2
  
