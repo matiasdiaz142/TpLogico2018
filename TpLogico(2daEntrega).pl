@@ -18,9 +18,9 @@ mira(maiu,got).
 mira(gaston,hoc).
 
 %Series populares
-popular(got).
-popular(hoc).
-popular(starWars).
+esPopular(got).
+esPopular(hoc).
+esPopular(starWars).
 
 %Series que planean ver
 planeaVer(juan,hoc).
@@ -60,7 +60,7 @@ esSpoiler(Serie,Spoiler):-paso(Serie,_,_,Spoiler).
 
 %Punto 4
 %leSpoileo(Persona1,Persona2,Serie)
-leSpoileo(Persona1,Persona2,Serie):-vio(Persona2,Serie),leDijo(Persona1,Persona2,Serie,Spoiler).
+leSpoileo(Persona1,Persona2,Serie):-vio(Persona2,Serie),leDijo(Persona1,Persona2,Serie,Spoiler),esSpoiler(Serie,Spoiler).
 
 %Punto 5
 %televidenteResponsable(Persona)
@@ -70,8 +70,8 @@ persona(Persona):-mira(Persona,_).
 persona(Persona):-planeaVer(Persona,_).
 
 %Punto 6
-vieneZafando(Persona,Serie):- vio(Persona,Serie),not(leSpoileo(_,Persona,Serie)),popular(Serie).
-vieneZafando(Persona,Serie):- vio(Persona,Serie),not(leSpoileo(_,Persona,Serie)),forall(vio(Persona,Serie),pasoAlgoFuerte(Serie,T)).
+vieneZafando(Persona,Serie):- vio(Persona,Serie),not(leSpoileo(_,Persona,Serie)),esPopular(Serie).
+vieneZafando(Persona,Serie):- vio(Persona,Serie),not(leSpoileo(_,Persona,Serie)),forall(vio(Persona,Serie),pasoAlgoFuerte(Serie,_)).
 
 pasoAlgoFuerte(Serie,Temporada):- paso(Serie,Temporada,_,muerte(_)).
 pasoAlgoFuerte(Serie,Temporada):- paso(Serie,Temporada,_,relacion(amorosa,_,_)).
@@ -83,9 +83,21 @@ vio(Persona,Serie):-planeaVer(Persona,Serie).
  %Segunda Entrega
  
  %Punto 1
- 
 malaGente(Persona):- persona(Persona),forall(leDijo(Persona,OtraPersona,Serie,_),leSpoileo(Persona,OtraPersona,Serie)).
-malaGente(Persona):-leSpoileo(Persona,_,Serie),not(mira(Persona,Serie)).
+malaGente(Persona):-vio(Persona2,Serie),leDijo(Persona,Persona2,Serie,_),not(mira(Persona,Serie)).
+
+%No uso el predicado leSpoileo porque al considerar esSpoiler(Serie,Spoiler) al final del predicado, aye nunca entraria
+%ya que, las cosas que les dijo no son spoilers. Si las cosas que aye dijo son spoilers, se contradice con el punto de 
+%televidenteResponsable que dice que aye no dijo ningun spoiler a nadie.
+
+%malaGente(Persona):-leSpoileo(Persona,_,Serie),not(mira(Persona,Serie)).
 
 %Punto 2
- 
+fuerte(Serie,AlgoQuePaso):-pasoAlgoFuerte(Serie,_),paso(Serie,_,_,AlgoQuePaso).
+
+%Punto 3
+popularidad(Serie,Popularidad):- esPopular(Serie),findall(Persona,mira(Persona,Serie),PersonasQueMiran),length(PersonasQueMiran,CantidadQueMiran),
+findall(Persona,leDijo(Persona,_,Serie,_),PersonasQueConversan),length(PersonasQueConversan,CantidadQueConversan),
+Popularidad is CantidadQueMiran*CantidadQueConversan.
+
+popular(Serie):-popularidad(Serie,Popularidad),popularidad(starWars,PopularidadStarwars),Popularidad >= PopularidadStarwars.
