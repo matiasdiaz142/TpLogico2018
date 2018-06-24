@@ -112,7 +112,7 @@ fullSpoil(Persona1,Persona2):-leDijo(Persona1,Persona2,_,_).
 fullSpoil(Persona1,Persona2):-leDijo(Persona1,OtraPersona,_,_),amigoDeAmigos(OtraPersona,Persona2),Persona1 \= Persona2.
 
 amigoDeAmigos(Persona1,Persona2):-amigo(Persona1,Persona2).
-amigoDeAmigos(Persona1,Persona2):-amigo(Persona1,Persona3),amigoDeAmigos(Persona3,Persona2),Persona1 \= Persona2.
+amigoDeAmigos(Persona1,Persona2):-amigo(Persona1,OtraPersona),amigoDeAmigos(OtraPersona,Persona2),Persona1 \= Persona2.
 
 /*
 Sin Recursividad
