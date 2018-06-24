@@ -65,3 +65,55 @@ true ;
 Persona = nico ;
 Persona = nico ;
 false.
+
+Test Segunda Entrega
+
+Punto 1 Malo, malo, malo eres...
+
+?- malaGente(gaston).
+true ;
+
+?- malaGente(aye).
+true ;
+
+Punto 2 Series con cosas fuertes
+
+?- fuerte(Serie,CosaQuePaso).
+Serie = futurama,
+CosaQuePaso = muerte(seymourDiera) ;
+Serie = starWars,
+CosaQuePaso = muerte(emperor) ;
+Serie = starWars,
+CosaQuePaso = relacion(parentesco, anakin, rey) ;
+Serie = starWars,
+CosaQuePaso = relacion(parentesco, vader, luke) ;
+Serie = himym,
+CosaQuePaso = relacion(amorosa, ted, robin) ;
+Serie = himym,
+CosaQuePaso = relacion(amorosa, swarley, robin) ;
+
+Punto 4 Popularidad
+
+?- popular(Serie).
+Serie = got ;
+Serie = starWars.
+
+Punto 5 Amigos son los amigos...
+
+?- fullSpoil(nico,Persona).
+Persona = maiu ;
+Persona = juan ;
+Persona = gaston ;
+Persona = juan ;
+Persona = aye ;
+Persona = aye ;
+false.
+
+?- fullSpoil(gaston,Persona).
+Persona = maiu ;
+Persona = juan ;
+Persona = aye ;
+false.
+
+?- fullSpoil(maiu,Persona).
+false.
