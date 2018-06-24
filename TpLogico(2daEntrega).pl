@@ -101,3 +101,13 @@ findall(Persona,leDijo(Persona,_,Serie,_),PersonasQueConversan),length(PersonasQ
 Popularidad is CantidadQueMiran*CantidadQueConversan.
 
 popular(Serie):-popularidad(Serie,Popularidad),popularidad(starWars,PopularidadStarwars),Popularidad >= PopularidadStarwars.
+
+%Punto 4
+amigo(nico, maiu).
+amigo(maiu, gaston).
+amigo(maiu, juan).
+amigo(juan, aye).
+
+fullSpoil(Persona1,Persona2):-leDijo(Persona1,Persona2,_,_).
+fullSpoil(Persona1,Persona2):-leDijo(Persona1,OtraPersona,_,_),amigo(OtraPersona,Persona2),Persona1 \= Persona2.
+fullSpoil(Persona1,Persona2):-leDijo(Persona1,OtraPersona,_,_),amigo(OtraPersona,Persona3),amigo(Persona3,Persona2),Persona1 \= Persona2.
