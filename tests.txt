@@ -1,0 +1,67 @@
+Test Primer Entrega
+Punto 3
+
+?- esSpoiler(starWars,muerte(emperor)).
+true ;
+  
+?- esSpoiler(starWars,muerte(pedro)).
+false.
+
+?- esSpoiler(starWars,relacion(parentesco,anakin,rey)).
+true ;
+	
+?- esSpoiler(starWars,relacion(padre,anakin,lavezzi)).
+false.
+	
+Pueden hacerse consultas del tipo individuales o existenciales, ya que,
+es totalmente inversible el predicado. Se pueden hacer consultas por la serie
+o el spoiler.
+
+Punto 4
+
+?- leSpoileo(gaston,maiu,got).
+true ;
+
+?- leSpoileo(nico,maiu,starWars).
+true ;
+
+Punto 5
+
+?- televidenteResponsable(Persona).
+Persona = juan ;
+Persona = juan ;
+Persona = juan ;
+Persona = maiu ;
+Persona = maiu ;
+Persona = maiu ;
+Persona = juan ;
+Persona = aye ;
+false.
+
+?- televidenteResponsable(nico).
+false.
+
+?- televidenteResponsable(gaston).
+false.
+
+Pueden hacerse consultas del tipo individuales o existenciales, ya que,
+es totalmente inversible el predicado.
+
+Punto 6
+
+?- vieneZafando(maiu,Serie).
+false.
+
+?- vieneZafando(juan,himym).
+true ;
+
+?- vieneZafando(juan,got).
+true ;
+
+?- vieneZafando(juan,hoc).
+true ;
+
+?- vieneZafando(Persona,starWars).
+Persona = nico ;
+Persona = nico ;
+false.
