@@ -60,31 +60,29 @@ esSpoiler(Serie,Spoiler):-paso(Serie,_,_,Spoiler).
 
 %Punto 4
 %leSpoileo(Persona1,Persona2,Serie)
-leSpoileo(Persona1,Persona2,Serie):-vio(Persona2,Serie),leDijo(Persona1,Persona2,Serie,Spoiler),esSpoiler(Serie,Spoiler).
+leSpoileo(Persona1,Persona2,Serie):-fanaticoSerie(Persona2,Serie),leDijo(Persona1,Persona2,Serie,Spoiler),esSpoiler(Serie,Spoiler).
 
 %Punto 5
 %televidenteResponsable(Persona)
-televidenteResponsable(Persona):-persona(Persona),not(leSpoileo(Persona,_,_)).
+televidenteResponsable(Persona):-fanaticoSerie(Persona,_),not(leSpoileo(Persona,_,_)).
 
-persona(Persona):-mira(Persona,_).
-persona(Persona):-planeaVer(Persona,_).
+%Definimos fanatico de una serie como a alguien que mira o planea ver una serie.
+fanaticoSerie(Persona,Serie):-mira(Persona,Serie).
+fanaticoSerie(Persona,Serie):-planeaVer(Persona,Serie).
 
 %Punto 6
-vieneZafando(Persona,Serie):- vio(Persona,Serie),not(leSpoileo(_,Persona,Serie)),esPopular(Serie).
-vieneZafando(Persona,Serie):- vio(Persona,Serie),not(leSpoileo(_,Persona,Serie)),forall(vio(Persona,Serie),pasoAlgoFuerte(Serie,_)).
+vieneZafando(Persona,Serie):- fanaticoSerie(Persona,Serie),not(leSpoileo(_,Persona,Serie)),esPopular(Serie).
+vieneZafando(Persona,Serie):- fanaticoSerie(Persona,Serie),not(leSpoileo(_,Persona,Serie)),forall(paso(Serie,Temporada,_,_),pasoAlgoFuerte(Serie,Temporada)).
 
 pasoAlgoFuerte(Serie,Temporada):- paso(Serie,Temporada,_,muerte(_)).
 pasoAlgoFuerte(Serie,Temporada):- paso(Serie,Temporada,_,relacion(amorosa,_,_)).
 pasoAlgoFuerte(Serie,Temporada):- paso(Serie,Temporada,_,relacion(parentesco,_,_)).
 
-vio(Persona,Serie):-mira(Persona,Serie).
-vio(Persona,Serie):-planeaVer(Persona,Serie).
-
  %Segunda Entrega
  
  %Punto 1
-malaGente(Persona):- persona(Persona),forall(leDijo(Persona,OtraPersona,Serie,_),leSpoileo(Persona,OtraPersona,Serie)).
-malaGente(Persona):-vio(Persona2,Serie),leDijo(Persona,Persona2,Serie,_),not(mira(Persona,Serie)).
+malaGente(Persona):- fanaticoSerie(Persona,_),forall(leDijo(Persona,OtraPersona,_,_),leSpoileo(Persona,OtraPersona,_)).
+malaGente(Persona):-fanaticoSerie(Persona2,Serie),leDijo(Persona,Persona2,Serie,_),not(mira(Persona,Serie)).
 
 %No uso el predicado leSpoileo porque al considerar esSpoiler(Serie,Spoiler) al final del predicado, aye nunca entraria
 %ya que, las cosas que les dijo no son spoilers. Si las cosas que aye dijo son spoilers, se contradice con el punto de 
