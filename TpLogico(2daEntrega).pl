@@ -14,6 +14,9 @@ mira(maiu,starWars).
 mira(maiu,onePiece).
 mira(maiu,got).
 
+%Cosas que mira Pedro
+mira(pedro,got).
+
 %Cosas que mira Gaston
 mira(gaston,hoc).
 
@@ -53,6 +56,14 @@ leDijo(nico, juan, got, muerte(tyrion)).
 leDijo(aye, juan, got, relacion(amistad, tyrion, john)).
 leDijo(aye, maiu, got, relacion(amistad, tyrion, john)).
 leDijo(aye, gaston, got, relacion(amistad, tyrion, dragon)).
+leDijo(nico,juan,futurama,muerte(seymourDiera)).
+leDijo(pedro,aye,got,relacion(amistad,tyrion,dragon)).
+leDijo(pedro,nico,got,relacion(parentesco,tyrion,dragon)).
+
+%paso(got, 3, 2, plotTwist([suenio,sinPiernas]).
+%paso(got, 3, 12, plotTwist([fuego,boda]).
+%paso(supercampeones, 9, 9, plotTwist([suenio,coma,sinPiernas]).
+%paso(drHouse, 8, 7, plotTwist([coma,pastillas]).
 
 %Punto 3
 %esSpoiler(Serie,Spoiler)
@@ -84,21 +95,18 @@ pasoAlgoFuerte(Serie,Temporada):- paso(Serie,Temporada,_,relacion(parentesco,_,_
 malaGente(Persona):- fanaticoSerie(Persona,_),forall(leDijo(Persona,OtraPersona,_,_),leSpoileo(Persona,OtraPersona,_)).
 malaGente(Persona):-fanaticoSerie(Persona2,Serie),leDijo(Persona,Persona2,Serie,_),not(mira(Persona,Serie)).
 
-%No uso el predicado leSpoileo porque al considerar esSpoiler(Serie,Spoiler) al final del predicado, aye nunca entraria
-%ya que, las cosas que les dijo no son spoilers. Si las cosas que aye dijo son spoilers, se contradice con el punto de 
-%televidenteResponsable que dice que aye no dijo ningun spoiler a nadie.
-
-%malaGente(Persona):-leSpoileo(Persona,_,Serie),not(mira(Persona,Serie)).
-
 %Punto 2
 fuerte(Serie,AlgoQuePaso):-pasoAlgoFuerte(Serie,_),paso(Serie,_,_,AlgoQuePaso).
+%fuerte(Serie,plotTwist):- not(cliche()),paso(Serie,_,_,AlgoQuePaso).
+%cliche(Serie,Lista):- plotTwist(_,_,_,Lista),forall(plotTwist(Serie2,_,_,Lista2),(member(Elemento,Lista),member(Elemento,Lista2))).
 
 %Punto 3
+popular(hoc).
+popular(Serie):-popularidad(Serie,Popularidad),popularidad(starWars,PopularidadStarwars),Popularidad >= PopularidadStarwars.
+
 popularidad(Serie,Popularidad):- esPopular(Serie),findall(Persona,mira(Persona,Serie),PersonasQueMiran),length(PersonasQueMiran,CantidadQueMiran),
 findall(Persona,leDijo(Persona,_,Serie,_),PersonasQueConversan),length(PersonasQueConversan,CantidadQueConversan),
 Popularidad is CantidadQueMiran*CantidadQueConversan.
-
-popular(Serie):-popularidad(Serie,Popularidad),popularidad(starWars,PopularidadStarwars),Popularidad >= PopularidadStarwars.
 
 %Punto 4
 amigo(nico, maiu).
@@ -112,9 +120,100 @@ fullSpoil(Persona1,Persona2):-leDijo(Persona1,OtraPersona,_,_),amigoDeAmigos(Otr
 amigoDeAmigos(Persona1,Persona2):-amigo(Persona1,Persona2).
 amigoDeAmigos(Persona1,Persona2):-amigo(Persona1,OtraPersona),amigoDeAmigos(OtraPersona,Persona2),Persona1 \= Persona2.
 
-/*
-Sin Recursividad
-fullSpoil(Persona1,Persona2):-leDijo(Persona1,Persona2,_,_).
-fullSpoil(Persona1,Persona2):-leDijo(Persona1,OtraPersona,_,_),amigo(OtraPersona,Persona2),Persona1 \= Persona2.
-fullSpoil(Persona1,Persona2):-leDijo(Persona1,OtraPersona,_,_),amigo(OtraPersona,Persona3),amigo(Persona3,Persona2),Persona1 \= Persona2.
-*/
+%run_tests.
+:- begin_tests(spoileres).
+%Tests Primera Entrega
+%Punto 3
+test(es_spoiler_emperor,nondet) :-
+	esSpoiler(starWars,muerte(emperor)).
+  
+test(no_es_spoiler_pedro,fail) :-
+	esSpoiler(starWars,muerte(pedro)).
+
+test(hay_algun_spoiler,nondet) :-
+	esSpoiler(starWars,muerte(_)).
+    
+test(es_spoiler_relacion,nondet) :-	
+	esSpoiler(starWars,relacion(parentesco,anakin,rey)).
+	
+test(no_es_spoiler_relacion,fail) :-	
+	esSpoiler(starWars,relacion(padre,anakin,lavezzi)).
+	
+test(hay_algun_spoiler_relacion,nondet) :-	
+	esSpoiler(starWars,relacion(parentesco,_,_)).
+%Punto 4
+test(le_spoileo,nondet) :-	
+	leSpoileo(gaston,maiu,got).
+	
+test(le_spoileo2,nondet) :-	
+	leSpoileo(nico,maiu,starWars).
+%Punto 5
+test(televidente_responsable,set(Personas == [juan,aye,maiu])) :-	
+	televidenteResponsable(Personas).
+	
+test(no_televidente_responsable,set(Personas == [nico,gaston,pedro])) :-	
+	fanaticoSerie(Personas,_),not(televidenteResponsable(Personas)).
+
+test(hay_algun_televidente_responsable,nondet) :-	
+	televidenteResponsable(_).
+%Punto 6		
+test(viene_zafando_maiu) :-	
+	not(vieneZafando(maiu,_)).
+
+test(viene_zafando_juan,set(Series == [himym,got,hoc])) :-
+	vieneZafando(juan,Series).
+
+test(viene_zafando_nico,[true(Persona == nico), nondet]) :-
+	vieneZafando(Persona,starWars).
+	
+%Tests Segunda Entrega
+%Punto 1
+test(mala_gente_aye,nondet):-
+	malaGente(aye).
+	
+test(mala_gente_gaston,nondet):-
+	malaGente(gaston).
+	
+test(mala_gente_pedro):-
+	not(malaGente(pedro)).
+%Punto 2
+test(muerte_seymouDiera_futurama,nondet):-
+	fuerte(futurama,muerte(seymourDiera)).
+	
+test(muerte_emperor_starWars,nondet):-
+	fuerte(starWars,muerte(emperor)).
+	
+test(parentesco_anakin_rey_starWars,nondet):-
+	fuerte(starWars,relacion(parentesco, anakin, rey)).
+	
+test(parentesco_vader_luke_starWars,nondet):-
+	fuerte(starWars,relacion(parentesco, vader, luke)).
+	
+test(amorosa_ted_robin_himym,nondet):-
+	fuerte(himym,relacion(amorosa, ted, robin)).
+
+test(amorosa_swarley_robin_himym,nondet):-
+	fuerte(himym,relacion(amorosa, swarley, robin)).
+	
+%Faltan mas test de plot twist
+%Punto 3
+test(popular_got):-
+	popular(got).
+
+test(popular_starWars):-
+	popular(starWars).
+
+test(popular_hoc,nondet):-
+	popular(hoc).
+	
+%Punto 4	
+test(fullSpoil1,set(Personas == [aye,juan,maiu,gaston])):-
+	fullSpoil(nico,Personas).
+
+test(fullSpoil2,set(Personas == [maiu,juan,aye])):-
+	fullSpoil(gaston,Personas).
+
+test(fullSpoil3):-
+	not(fullSpoil(maiu,_)).
+
+:- end_tests(spoileres).
